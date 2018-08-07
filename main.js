@@ -1,4 +1,5 @@
 const crypto = require('crypto');
+const SHA256 = crypto.createHash('sha256');
 
 class Block {
 	constructor(index, timestamp, data, previousHash = ''){
@@ -6,9 +7,37 @@ class Block {
 		this.timestamp = timestamp;
 		this.data = data;
 		this.previousHash = previousHash;
-		this.hash = '';
+		this.hash = this.calculateHash();
 	}
 	calculateHash(){
-		
+		return SHA256(this.index + this.previousHash + this.timestamp + JSON.stringify(this.data)).toString();
 	}
 }
+
+class Blockchain {
+	constructor(){
+		this.chain = [this.createGenesisBlock()];
+	}
+	
+	createGenesisBlock(){
+		return new Block(0, "08/07/2018", "Genesis Block", "0");
+	}
+	
+	getLatestBlock(){
+		return this.chain[this.chain.length - 1];
+	}
+
+	addBlock(newBlock){
+		newBlock.previousHash = this.getLatestBlock().hash;
+		newBlock.hash = newBlock.calculateHash();
+		this.chain.push(newBlock);
+	}
+}
+
+
+let newCoin = new Blockchain();
+
+newCoin.addBlock(new Block(1, "08/05/2018", {amount: 4})); 
+newCoin.addBlock(new Block(2, "08/05/2018", {amount: 10}));
+
+console.log(JSON.stringify(newCoin, null, 4));
