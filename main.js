@@ -49,7 +49,8 @@ class Blockchain {
 	}
 	
 	createGenesisBlock(){
-		return new Block(0, "2018-08-07 17:15:02", "Genesis Block", "0");
+		//return new Block(0, "2018-08-07 17:15:02", "Genesis Block", "0");
+		return new Block(0, new Date().toISOString().replace(/T/, ' ').replace(/\..+/, ''), "Genesis Block", "0");
 	}
 	
 	getLatestBlock(){
@@ -86,7 +87,7 @@ class Blockchain {
 let newCoin = new Blockchain();
 
 console.log('Mining block 1...');
-newCoin.addBlock(new Block(1, new Date().toISOString().replace(/T/, ' ').replace(/\..+/, ''), {amount: 4})); 
+newCoin.addBlock(new Block(1, new Date().toISOString().replace(/T/, ' ').replace(/\..+/, ''), {amount: 4, nap: 2})); 
 
 console.log('Mining block 2...');
 newCoin.addBlock(new Block(2, new Date().toISOString().replace(/T/, ' ').replace(/\..+/, ''), {amount: 10}));
